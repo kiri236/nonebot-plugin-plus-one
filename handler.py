@@ -13,10 +13,13 @@ ignore_words = plugin_config.plus_one_ignore_words
 wait_enabled = plugin_config.plus_one_is_wait
 constThreshold = plugin_config.plus_one_threshold
 Plus_Threshold = constThreshold-1
+def get_url(s1:str)->str:
+    url = s1.split("fileid=")[1][:36]
+    return url
 def is_equal(msg1: Message, msg2: Message)->bool:
     """判断消息是否相等"""
     if len(msg1) == len(msg2) == 1 and msg1[0].type == msg2[0].type == "image":
-        if msg1[0].data.get("file_size") == msg2[0].data.get("file_size"):
+        if get_url(msg1[0].data.get("url")) == get_url(msg2[0].data.get("url")):
             return True
     if msg1 == msg2:
         return True
