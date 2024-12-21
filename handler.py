@@ -13,19 +13,20 @@ ignore_words = plugin_config.plus_one_ignore_words
 wait_enabled = plugin_config.plus_one_is_wait
 constThreshold = plugin_config.plus_one_threshold
 Plus_Threshold = constThreshold-1
-def is_equal(msg1: Message, msg2: Message):
+def is_equal(msg1: Message, msg2: Message)->bool:
     """判断消息是否相等"""
     if len(msg1) == len(msg2) == 1 and msg1[0].type == msg2[0].type == "image":
         if msg1[0].data.get("file_size") == msg2[0].data.get("file_size"):
             return True
     if msg1 == msg2:
         return True
+    return False
 
 def is_start(textlist:list, msg2: Message)->bool:
     """判断能否复读"""
     cnt = 0
     for i in reversed(textlist):
-        if msg2 == i:
+        if is_equal(msg2,i):
             cnt = cnt+1
         else:
             break
@@ -37,14 +38,14 @@ def doubled():
 
 def go_back():
     global Plus_Threshold
-    Plus_Threshold = constThreshold
+    Plus_Threshold = constThreshold-1
 
 def check_word(message:Message)->bool:
     is_text = all(seg.is_text() for seg in message)
     if not is_text:
-        return True
-    elif message.__str__() in ignore_words:
         return False
+    elif message.__str__() in ignore_words:
+        return True
 
 
 @plus.handle()
@@ -55,7 +56,8 @@ async def plush_handler(bot: Bot, event: Event):
     group_id = session.get_id(SessionIdType.GROUP).split("_")[-1]
     if group_id not in plugin_config.plus_one_white_list:
         return
-
+    if group_id != '793044971':
+        return
     # 获取群聊记录
     text_list = msg_dict.get(group_id, None)
     if not text_list:
@@ -68,15 +70,16 @@ async def plush_handler(bot: Bot, event: Event):
         return
     try:
         if not is_start(text_list,msg):
-            text_list.append(msg)
-            msg_dict[group_id] = text_list
-            if not is_equal(text_list[-1],text_list[-2]):
+            if  len(text_list)<1 or is_equal(text_list[-1],msg):
+                text_list.append(msg)
+            else:
                 go_back()
+                text_list = [msg]
+            msg_dict[group_id] = text_list
         else :
-            if len(text_list) >= Plus_Threshold-1:
+            if len(text_list) >= Plus_Threshold:
                 text_list = [msg]
                 msg_dict[group_id] = text_list
-                ans = "op"
                 if wait_enabled:
                     doubled()
                 await plus.send(msg)
