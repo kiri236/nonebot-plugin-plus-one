@@ -5,7 +5,8 @@
 
 <div align="center">
 
-<h1 align="center">🐣🐤一个仅有40行代码的复读姬 ✨</h1>
+<h1 align="center">
+🐣🐤一个仅有40行代码的复读姬 ✨</h1>
 <p align="center">
 _✨ 只是一个复读姬：支持群聊白名单、文本复读、图片表情复读、甚至是转发和分享的复读 ✨_
 </p>
@@ -42,7 +43,7 @@ pip install nonebot-plugin-plus-one
 |PLUS_ONE_WHITE_LIST|是|list[str]|[]|群聊或私聊白名单，单个或多个示例，可填入群 QQ 号或个人 QQ 号|PLUS_ONE_WHITE_LIST = ["10000000"] <br> PLUS_ONE_WHITE_LIST = ["10000000", "1000000"]
 |PLUS_ONE_THRESHOLD|否|int|5|当同一句话重复多少次后开始复读|PLUS_ONE_THRESHOLD=4|
 |PLUS_ONE_IGNORE_WORDS|否|list[str]|[]|不复读的文字|PLUS_ONE_IGNORE_WORDS=["1","2"]|
-|PLUS_ONE_IS_WAIT|否|bool|true|复读后是否一段时间内不复读|PLUS_ONE_IS_WAIT=true|
+|PLUS_ONE_IS_WAIT|否|bool|true|复读一句话后是否一段时间内不再连续复读同一句话|PLUS_ONE_IS_WAIT=true|
 ### git
 
 ```shell
