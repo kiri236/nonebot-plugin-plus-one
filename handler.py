@@ -56,8 +56,6 @@ async def plush_handler(bot: Bot, event: Event):
     group_id = session.get_id(SessionIdType.GROUP).split("_")[-1]
     if group_id not in plugin_config.plus_one_white_list:
         return
-    if group_id != '793044971':
-        return
     # 获取群聊记录
     text_list = msg_dict.get(group_id, None)
     if not text_list:
