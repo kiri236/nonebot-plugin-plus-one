@@ -25,15 +25,9 @@ def is_equal(msg1: Message, msg2: Message)->bool:
         return True
     return False
 
-def is_start(textlist:list, msg2: Message)->bool:
+def is_start(textlist:list)->bool:
     """判断能否复读"""
-    cnt = 0
-    for i in reversed(textlist):
-        if is_equal(msg2,i):
-            cnt = cnt+1
-        else:
-            break
-    return cnt>=Plus_Threshold
+    return textlist.__len__()>=Plus_Threshold
 
 def doubled():
     global Plus_Threshold
@@ -70,7 +64,7 @@ async def plush_handler(bot: Bot, event: Event):
     if check_word(msg):
         return
     try:
-        if not is_start(text_list,msg):
+        if not is_start(text_list):
             if  len(text_list)<1 or is_equal(text_list[-1],msg):
                 text_list.append(msg)
             else:
@@ -78,11 +72,10 @@ async def plush_handler(bot: Bot, event: Event):
                 text_list = [msg]
             msg_dict[group_id] = text_list
         else :
-            if len(text_list) >= Plus_Threshold:
-                text_list = [msg]
-                msg_dict[group_id] = text_list
-                if wait_enabled:
-                    doubled()
-                await plus.send(msg)
+            text_list = [msg]
+            msg_dict[group_id] = text_list
+            if wait_enabled:
+                doubled()
+            await plus.send(msg)
     except IndexError:
         pass
