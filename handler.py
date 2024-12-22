@@ -46,7 +46,7 @@ async def plush_handler(bot: Bot, event: Event):
     session = extract_session(bot, event)
     group_id = session.get_id(SessionIdType.GROUP).split("_")[-1]
     if group_id not in plugin_config.plus_one_white_list:
-        return
+        await plus.finish()
     # 获取群聊记录
     text_list = msg_dict.get(group_id, None)
     if not text_list:
@@ -55,7 +55,10 @@ async def plush_handler(bot: Bot, event: Event):
     # 获取当前信息
     msg = event.get_message()
     if check_word(msg):
-        return
+        go_back()
+        text_list.clear()
+        msg_dict[group_id] = text_list
+        await plus.finish()
     try:
         if not is_start(text_list):
             if  len(text_list)<1 or is_equal(text_list[-1],msg):
