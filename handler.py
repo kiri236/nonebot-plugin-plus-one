@@ -1,5 +1,6 @@
 from fastapi.params import Depends
 from nonebot import get_plugin_config
+from nonebot.adapters.onebot.v12 import MessageEvent
 from nonebot.plugin import on_message
 from nonebot.rule import regex
 from nonebot.adapters import Event, Message, Bot
@@ -54,7 +55,7 @@ async def plush_handler(bot: Bot, event: Event):
         msg_dict[group_id] = text_list
     # 获取当前信息
     msg = event.get_message()
-    if check_word(msg):
+    if check_word(msg) or event.reply:
         go_back()
         text_list.clear()
         msg_dict[group_id] = text_list
